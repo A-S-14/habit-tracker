@@ -380,6 +380,9 @@
     </div>
 
     <script>
+        alert('JavaScript is running!');
+        console.log('Script loaded!');
+        
         // CONFIGURATION - Replace with your Google Sheets Web App URL
         // INSTRUCTIONS: 
         // 1. Create a Google Sheet with columns: date, steps, exercise, mindfulness, currentlyReading
@@ -388,6 +391,7 @@
         // 4. Deploy as Web App (Anyone can access)
         // 5. Copy the Web App URL and paste it below
         const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxGxvXcpbxG5CXGk4oBo0VZ64r5a36NXr3DCceKa1KLH5IDHPYevbcmsAF2LDiDPR7XVA/exec';
+        console.log('SHEETS_URL set to:', SHEETS_URL);
 
         // Habit configuration
         const HABITS = [
@@ -625,7 +629,9 @@
         }
 
         // Initial render
+        console.log('About to call renderTracker()');
         renderTracker();
+        console.log('Called renderTracker()');
         
         // Auto-refresh every 5 minutes
         setInterval(renderTracker, 5 * 60 * 1000);
