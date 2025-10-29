@@ -419,11 +419,15 @@
 
         async function fetchHealthData() {
             try {
+                console.log('Fetching data from:', SHEETS_URL);
                 const response = await fetch(SHEETS_URL);
+                console.log('Response status:', response.status);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
+                console.log('Data received:', data);
+                console.log('Number of history entries:', data.history ? data.history.length : 0);
                 return data;
             } catch (error) {
                 console.error('Error fetching health data:', error);
@@ -568,9 +572,15 @@
             try {
                 const data = await fetchHealthData();
                 
+                console.log('Full data object:', data);
+                
                 // Get today's data
                 const today = new Date().toISOString().split('T')[0];
+                console.log('Looking for today:', today);
+                console.log('Available dates:', data.history?.map(d => d.date));
+                
                 const todayData = data.history?.find(d => d.date === today) || {};
+                console.log('Today data found:', todayData);
                 
                 // Render stat cards
                 const statsHtml = HABITS.map(habit => 
