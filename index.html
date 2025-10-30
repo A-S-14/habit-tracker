@@ -468,9 +468,14 @@
             
             let calendarHtml = '';
             let monthsHtml = '';
-            let currentMonth = -1;
             const monthPositions = [];
             const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            // Since we start on August 1, add it explicitly
+            monthPositions.push({
+                name: 'Aug',
+                column: 0
+            });
             
             // Generate exactly 365 calendar days
             for (let i = 0; i < daysToShow; i++) {
@@ -478,16 +483,18 @@
                 date.setDate(date.getDate() + i);
                 const dateStr = date.toISOString().split('T')[0];
                 
-                // Track month changes for labels
+                // Track month changes for labels - only on the 1st of the month
                 const month = date.getMonth();
+                const dayOfMonth = date.getDate();
                 const columnIndex = Math.floor(i / 10);
                 
-                if (month !== currentMonth) {
+                // Only add month label if this is the first day of the month (and not August which we added manually)
+                if (dayOfMonth === 1 && month !== 7) {  // 7 = August (0-indexed)
+                    console.log(`${monthNames[month]} 1st at day ${i}, column ${columnIndex}`);
                     monthPositions.push({
                         name: monthNames[month],
                         column: columnIndex
                     });
-                    currentMonth = month;
                 }
                 
                 // Check if this date has activity
@@ -534,6 +541,7 @@
             }
             
             // Create month labels HTML
+            console.log('Month positions:', monthPositions);
             let lastColumn = -1;
             monthPositions.forEach(month => {
                 const emptySpans = month.column - lastColumn - 1;
