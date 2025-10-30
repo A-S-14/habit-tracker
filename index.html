@@ -163,6 +163,7 @@
             padding: 25px;
             display: flex;
             flex-direction: column;
+            overflow: visible;
         }
 
         .calendar-header {
@@ -218,6 +219,7 @@
         .calendar-container {
             flex: 1;
             overflow-x: auto;
+            overflow-y: visible;
         }
 
         .calendar-months {
@@ -240,6 +242,7 @@
             grid-template-rows: repeat(10, 14px);
             gap: 4px;
             max-width: 100%;
+            overflow: visible;
         }
 
         .calendar-day {
@@ -254,6 +257,7 @@
             transition: all 0.2s ease;
             cursor: pointer;
             border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
         }
 
         .calendar-day:hover {
@@ -379,6 +383,9 @@
         <div id="error" style="display: none;" class="error"></div>
     </div>
 
+    <!-- Custom tooltip for calendar -->
+    <div id="customTooltip" style="position: fixed; background: rgba(0, 0, 0, 0.9); color: white; padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: pre-line; z-index: 99999; pointer-events: none; line-height: 1.5; display: none;"></div>
+
     <script>
         console.log('Script loaded!');
         
@@ -389,7 +396,7 @@
         // 3. Paste the doGet function code
         // 4. Deploy as Web App (Anyone can access)
         // 5. Copy the Web App URL and paste it below
-        const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxe6980M7FQPk5YRtEKLiGn3nRZ1dttZmANHSvBteCwMwfapvdIu_7gV_ZatQl2niloEA/exec';
+        const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxGxvXcpbxG5CXGk4oBo0VZ64r5a36NXr3DCceKa1KLH5IDHPYevbcmsAF2LDiDPR7XVA/exec';
         console.log('SHEETS_URL set to:', SHEETS_URL);
 
         // Habit configuration
@@ -463,6 +470,7 @@
             let monthsHtml = '';
             let currentMonth = -1;
             const monthPositions = [];
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             
             // Generate exactly 365 calendar days
             for (let i = 0; i < daysToShow; i++) {
@@ -475,8 +483,6 @@
                 const columnIndex = Math.floor(i / 10);
                 
                 if (month !== currentMonth) {
-                    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                     monthPositions.push({
                         name: monthNames[month],
                         column: columnIndex
@@ -504,13 +510,11 @@
                     // score of 0 keeps the default warm beige color
                 }
                 
-                // Add title attribute for hover tooltip
-                const dateDisplay = date.toLocaleDateString('en-US', { 
-                    weekday: 'short',
-                    month: 'short', 
-                    day: 'numeric',
-                    year: 'numeric'
-                });
+                // Add title attribute for hover tooltip - format as "28 Apr 2025"
+                const day = date.getDate();
+                const monthName = monthNames[date.getMonth()];
+                const year = date.getFullYear();
+                const dateDisplay = `${day} ${monthName} ${year}`;
                 
                 let contributionText = 'No activity';
                 if (dayData) {
@@ -526,7 +530,7 @@
                     }
                 }
                 
-                calendarHtml += `<div class="${className}" title="${dateDisplay}&#10;${contributionText}"></div>`;
+                calendarHtml += `<div class="${className}" data-tooltip="${dateDisplay}&#10;${contributionText}"></div>`;
             }
             
             // Create month labels HTML
@@ -543,6 +547,42 @@
             // Update the DOM
             document.getElementById('calendarGrid').innerHTML = calendarHtml;
             document.getElementById('calendarMonths').innerHTML = monthsHtml;
+            
+            // Initialize tooltips
+            initializeTooltips();
+        }
+
+        function initializeTooltips() {
+            // Use the existing tooltip element
+            const tooltip = document.getElementById('customTooltip');
+            if (!tooltip) {
+                console.error('Tooltip element not found');
+                return;
+            }
+            
+            // Add event listeners to all calendar days
+            const calendarDays = document.querySelectorAll('.calendar-day');
+            console.log('Initializing tooltips for', calendarDays.length, 'days');
+            
+            calendarDays.forEach(day => {
+                day.addEventListener('mouseenter', (e) => {
+                    const text = day.getAttribute('data-tooltip');
+                    if (text) {
+                        tooltip.textContent = text.replace(/&#10;/g, '\n');
+                        tooltip.style.display = 'block';
+                        
+                        const rect = day.getBoundingClientRect();
+                        // Position to the right of the calendar day
+                        tooltip.style.left = (rect.right + 15) + 'px';
+                        tooltip.style.top = (rect.top + (rect.height / 2)) + 'px';
+                        tooltip.style.transform = 'translateY(-50%)';
+                    }
+                });
+                
+                day.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                });
+            });
         }
 
         function calculateStreak(data) {
@@ -585,13 +625,15 @@
                     createStatCard(habit, yesterdayData[habit.key] || 0)
                 ).join('');
                 
-                // Add reading card with yesterday's data
+                // Add reading card with yesterday's data (clickable link to google.com)
                 const readingCardHtml = `
-                    <div class="reading-card">
-                        <div class="reading-icon">📚</div>
-                        <div class="reading-label">Currently Reading</div>
-                        <div class="reading-content">${yesterdayData.currentlyReading || 'No book selected'}</div>
-                    </div>
+                    <a href="https://www.google.com" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="reading-card">
+                            <div class="reading-icon">📚</div>
+                            <div class="reading-label">Currently Reading</div>
+                            <div class="reading-content">${yesterdayData.currentlyReading || 'No book selected'}</div>
+                        </div>
+                    </a>
                 `;
                 
                 document.getElementById('statsGrid').innerHTML = statsHtml + readingCardHtml;
@@ -604,10 +646,15 @@
                 document.getElementById('streakCounter').textContent = 
                     `${streak} day streak 🔥`;
                 
-                // Show last updated
+                // Show last updated and data date
                 const lastUpdate = new Date(data.lastUpdated || Date.now());
+                const dataDate = yesterday.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
                 document.getElementById('lastUpdated').textContent = 
-                    `Last updated: ${lastUpdate.toLocaleString()}`;
+                    `Data from: ${dataDate} | Last updated: ${lastUpdate.toLocaleString()}`;
                 
                 // Show content, hide loading
                 document.getElementById('loading').style.display = 'none';
