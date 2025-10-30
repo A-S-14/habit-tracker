@@ -223,7 +223,9 @@
         }
 
         .calendar-months {
-            display: flex;
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
             gap: 4px;
             margin-bottom: 5px;
             font-size: 10px;
@@ -232,8 +234,8 @@
         }
 
         .calendar-months span {
-            min-width: 14px;
-            text-align: center;
+            text-align: left;
+            padding-left: 2px;
         }
 
         .calendar-grid {
@@ -540,17 +542,28 @@
                 calendarHtml += `<div class="${className}" data-tooltip="${dateDisplay}&#10;${contributionText}"></div>`;
             }
             
-            // Create month labels HTML
+            // Create month labels HTML - one span per column
             console.log('Month positions:', monthPositions);
-            let lastColumn = -1;
+            
+            // Calculate total number of columns
+            const totalColumns = Math.ceil(daysToShow / 10);
+            
+            // Create array to hold month names for each column
+            const columnLabels = new Array(totalColumns).fill('');
+            
+            // Place month names at their correct columns
             monthPositions.forEach(month => {
-                const emptySpans = month.column - lastColumn - 1;
-                for (let i = 0; i < emptySpans; i++) {
-                    monthsHtml += '<span></span>';
+                if (month.column < totalColumns) {
+                    columnLabels[month.column] = month.name;
                 }
-                monthsHtml += `<span>${month.name}</span>`;
-                lastColumn = month.column;
             });
+            
+            // Generate HTML - one span per column with explicit column count
+            monthsHtml = columnLabels.map(label => `<span>${label}</span>`).join('');
+            
+            // Set the grid to have the exact number of columns
+            const monthsElement = document.getElementById('calendarMonths');
+            monthsElement.style.gridTemplateColumns = `repeat(${totalColumns}, 1fr)`;
             
             // Update the DOM
             document.getElementById('calendarGrid').innerHTML = calendarHtml;
