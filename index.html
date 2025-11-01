@@ -472,11 +472,21 @@
                 return `${year}-${month}-${day}`;
             }
             
-            const today = new Date();
+        const today = new Date();
             const daysToShow = 365; // Exactly 365 days
             
-            // Start date: August 1, 2025
-            const startDate = new Date(2025, 7, 1); // Month is 0-indexed, so 7 = August
+            // Start date: First day with data, or 365 days ago if no data
+            let startDate;
+            if (data.history && data.history.length > 0) {
+                // Sort history by date and get the earliest date
+                const sortedHistory = data.history.sort((a, b) => new Date(a.date) - new Date(b.date));
+                const firstDataDate = sortedHistory[0].date;
+                startDate = new Date(firstDataDate);
+            } else {
+                // Fallback: start 365 days ago from today
+                startDate = new Date(today);
+                startDate.setDate(today.getDate() - 365);
+            }
             
             let calendarHtml = '';
             let monthsHtml = '';
