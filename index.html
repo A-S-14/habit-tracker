@@ -493,9 +493,10 @@
             const monthPositions = [];
             const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             
-            // Since we start on August 1, add it explicitly
+            // Add the starting month label at column 0
+            const startMonth = startDate.getMonth();
             monthPositions.push({
-                name: 'Aug',
+                name: monthNames[startMonth],
                 column: 0
             });
             
