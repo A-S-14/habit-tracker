@@ -314,27 +314,33 @@
         }
 
         @media (max-width: 1024px) {
-        .main-content {
-            grid-template-columns: 1fr;
-            }
+    .main-content {
+        grid-template-columns: 1fr;
+    }
 
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-            }
-        }
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
 
-        @media (max-width: 768px) {
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card, .reading-card {
+        min-height: 140px;
+    }
+}
+
+@media (max-width: 480px) {
     body {
         padding: 10px;
     }
 
     .container {
         max-width: 100%;
-        padding: 0;
-    }
-
-    .header {
-        margin-bottom: 20px;
     }
 
     .header h1 {
@@ -344,36 +350,56 @@
     .header p {
         font-size: 0.85rem;
     }
-    
+
     .main-content {
+        grid-template-columns: 1fr;
         gap: 15px;
     }
 
     .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 
     .stat-card, .reading-card {
-        min-height: 120px;
-        width: 100%;
-        box-sizing: border-box;
+        min-height: 130px;
+        padding: 12px;
+    }
+
+    .stat-icon, .reading-icon {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+    }
+
+    .stat-label, .reading-label {
+        font-size: 0.6rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .reading-content {
+        font-size: 1.2rem;
+    }
+
+    .stat-unit {
+        font-size: 0.65rem;
     }
 
     .calendar-section {
-        padding: 15px;
-        width: 100%;
-        box-sizing: border-box;
+        padding: 12px;
     }
 
     .calendar-container {
         overflow-x: auto;
+        overflow-y: visible;
         -webkit-overflow-scrolling: touch;
     }
 
     .calendar-grid {
         gap: 2px;
+        min-width: max-content;
     }
 
     .calendar-day {
@@ -384,39 +410,16 @@
     }
 
     .calendar-months {
+        font-size: 7px;
+        min-width: max-content;
+    }
+
+    .calendar-legend {
         font-size: 8px;
     }
 
     .last-updated {
-        font-size: 0.75rem;
-        padding: 0 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .header h1 {
-        font-size: 1.1rem;
-    }
-
-    .stat-card, .reading-card {
-        padding: 12px;
-    }
-
-    .stat-value {
-        font-size: 1.4rem;
-    }
-
-    .reading-content {
-        font-size: 1.4rem;
-    }
-
-    .calendar-day {
-        width: 8px;
-        height: 8px;
-    }
-
-    .calendar-months {
-        font-size: 7px;
+        font-size: 0.7rem;
     }
 }
     </style>
