@@ -314,33 +314,91 @@
         }
 
         @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
+        .main-content {
+            grid-template-columns: 1fr;
             }
 
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+    body {
+        padding: 10px;
+    }
 
-            .calendar-grid {
-                gap: 3px;
-            }
+    .container {
+        max-width: 100%;
+    }
 
-            .calendar-day {
-                min-width: 12px;
-                min-height: 12px;
-            }
-        }
+    .header h1 {
+        font-size: 1.3rem;
+    }
+
+    .header p {
+        font-size: 0.85rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stat-card, .reading-card {
+        min-height: 120px;
+    }
+
+    .calendar-section {
+        padding: 15px;
+    }
+
+    .calendar-grid {
+        gap: 2px;
+    }
+
+    .calendar-day {
+        width: 10px;
+        height: 10px;
+        min-width: 10px;
+        min-height: 10px;
+    }
+
+    .calendar-months {
+        font-size: 8px;
+    }
+
+    .last-updated {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.1rem;
+    }
+
+    .stat-card, .reading-card {
+        padding: 12px;
+    }
+
+    .stat-value {
+        font-size: 1.4rem;
+    }
+
+    .reading-content {
+        font-size: 1.4rem;
+    }
+
+    .calendar-day {
+        width: 8px;
+        height: 8px;
+    }
+
+    .calendar-months {
+        font-size: 7px;
+    }
+}
     </style>
 </head>
 <body>
