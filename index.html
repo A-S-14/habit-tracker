@@ -330,6 +330,11 @@
 
     .container {
         max-width: 100%;
+        padding: 0;
+    }
+
+    .header {
+        margin-bottom: 20px;
     }
 
     .header h1 {
@@ -340,17 +345,31 @@
         font-size: 0.85rem;
     }
     
+    .main-content {
+        gap: 15px;
+    }
+
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 10px;
+        width: 100%;
     }
 
     .stat-card, .reading-card {
         min-height: 120px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .calendar-section {
         padding: 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .calendar-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .calendar-grid {
@@ -370,6 +389,7 @@
 
     .last-updated {
         font-size: 0.75rem;
+        padding: 0 10px;
     }
 }
 
