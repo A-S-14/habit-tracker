@@ -110,7 +110,7 @@
        .reading-content {
             color: #333;
             font-size: 1.6rem;
-            line-height: 1.2;
+            line-height: 1.1;
             font-weight: 700;
             text-align: center;
             flex-grow: 1;
@@ -124,17 +124,19 @@
             padding: 0 5px;
         }
 
-/* Desktop: Scale down if text is too long */
-@media (min-width: 769px) {
-    .reading-content {
-        font-size: clamp(1rem, 1.5vw, 1.6rem);
-        max-height: 100%;
-    }
-}
-
-        /* Responsive book title sizing */
+    /* Desktop: Aggressive scaling for long titles */
+    @media (min-width: 769px) {
         .reading-content {
-            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            font-size: clamp(0.9rem, 1.2vw, 1.6rem);
+            max-height: 100%;
+        }
+    }
+
+        /* Tablet */
+        @media (max-width: 768px) and (min-width: 481px) {
+            .reading-content {
+                font-size: clamp(0.95rem, 1.8vw, 1.4rem);
+            }
         }
         
         @media (max-width: 480px) {
@@ -431,9 +433,10 @@
     }
 
     .reading-content {
-        font-size: clamp(0.85rem, 4vw, 1.1rem);
+        font-size: clamp(0.9rem, 4.5vw, 1.2rem);
         line-height: 1.1;
-        padding: 0 4px;
+        padding: 0 8px;
+        max-height: 100%;
     }
 
     .stat-unit {
